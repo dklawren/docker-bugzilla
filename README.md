@@ -12,6 +12,14 @@ Configure a running Bugzilla system using Docker
 
 ##### How to build
 
+If you need to build the base image for yourself,  just change to the directory containing the checked out
+files and run the below command:
+
+```bash
+$ docker build -rm -t <my_name>/docker-bugzilla .
+```
+
+The `-rm` switch removes any interim containers automatically while the image is being created.
 
 ##### How to start
 
@@ -43,7 +51,7 @@ $ docker rm bugzilla
 ```
 
 You can point your browser to `http://localhost:8080/bugzilla` to see the the Bugzilla home page.
-You can ssh into the container using `ssh bugzilla@localhost -p2222`. The password is `bugzilla.
+You can ssh into the container using `ssh bugzilla@localhost -p2222`. The password is `bugzilla`.
 The above command that starts the container is also in the `bugzilla_start.sh` file. Once the image
 is cache locally, starting the container should happen very quickly. You can run multiple containers
 but you will need to give each one a different name/hostname as well as non-conflicting ports numbers
