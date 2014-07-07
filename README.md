@@ -7,7 +7,7 @@ Configure a running Bugzilla system using Docker
 * Running latest Fedora (20)
 * Preconfigured with initial data and test product
 * Running Apache2 and MySQL Community Server 5.6
-* Openssh running via systemd so you can ssh in to the system to make changes
+* Openssh server so you can ssh in to the system to make changes
 * Code resides in `/home/bugzilla/devel/htdocs/bugzilla` and can be updated using standard git commands
 
 ##### How to build
@@ -23,21 +23,12 @@ The `-rm` switch removes any interim containers automatically while the image is
 
 ##### How to start
 
-Since the container is using systemd to start the various services such as sshd, httpd, mysqld, etc. you will
-need to use `--privileged` and mount `/sys/fs/cgroup` as a read-only volume within the container.
-
-`--privileged` is required systemd requires CAP_SYS_ADMIN capability but Docker drops that capability in the
-non privileged containers, in order to add more security. This means for now you have to run systemd within a
-privileged container since privileged containers do not drop any capabilities. This should improve in
-future Docker releases.
-
 ```bash
-$ docker run -d -t --privileged \
+$ docker run -d -t \
     --name bugzilla \
     --hostname bugzilla \
     --publish 8080:80 \
     --publish 2222:22 \
-    --volume /sys/fs/cgroup:/sys/fs/cgroup:ro \
     dklawren/docker-bugzilla
 ```
 
