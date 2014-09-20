@@ -12,7 +12,7 @@ RUN yum -y install https://dev.mysql.com/get/mysql-community-release-fc20-5.noar
 RUN yum -y install supervisor mod_perl openssh-server mysql-community-server git \
                    sudo perl-App-cpanminus perl-CPAN mysql-community-devel \
                    gcc gcc-c++ make vim-enhanced perl-Software-License gd-devel \
-                   openssl-devel ImageMagick-devel graphviz patch; yum clean all
+                   openssl-devel ImageMagick-devel graphviz patch sendmail; yum clean all
 RUN yum -y update; yum clean all
 
 # User configuration

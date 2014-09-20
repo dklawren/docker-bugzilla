@@ -15,6 +15,7 @@ $CPANM Pod::Coverage
 $CPANM DBD::mysql
 $CPANM Cache::Memcached::GetParserXS
 $CPANM XMLRPC::Lite
+$CPANM Locale::Language
 $CPANM --installdeps --with-recommends .
 
 # Configure bugs database
