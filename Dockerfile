@@ -1,4 +1,4 @@
-FROM fedora
+FROM centos:centos6
 MAINTAINER David Lawrence <dkl@mozilla.com>
 
 # Environment
@@ -8,12 +8,13 @@ ENV BUGZILLA_REPO https://github.com/bugzilla/bugzilla.git
 ENV BUGZILLA_BRANCH 4.4
 
 # Software installation
-RUN yum -y install https://dev.mysql.com/get/mysql-community-release-fc20-5.noarch.rpm; yum clean all
-RUN yum -y install supervisor mod_perl openssh-server mysql-community-server git \
-                   sudo perl-App-cpanminus perl-CPAN mysql-community-devel \
-                   gcc gcc-c++ make vim-enhanced perl-Software-License gd-devel \
-                   openssl-devel ImageMagick-devel graphviz patch sendmail; yum clean all
-RUN yum -y update; yum clean all
+RUN yum -y install https://dev.mysql.com/get/mysql-community-release-el6-5.noarch.rpm && yum clean all
+RUN yum -y install epel-release && yum clean all
+RUN yum -y install supervisor mod_perl mod_perl-devel openssh-server openssh \
+                   mysql-community-server git sudo perl-perl-devel perl-CPAN \
+                   mysql-community-devel curl tar gzip gcc gcc-c++ make \
+                   vim-enhanced perl-Software-License gd-devel perl-XML-Parser \
+                   openssl-devel ImageMagick-devel graphviz patch postfix && yum clean all
 
 # User configuration
 RUN useradd -m -G wheel -u 1000 -s /bin/bash $BUGZILLA_USER
@@ -25,7 +26,6 @@ RUN mkdir -p /home/$BUGZILLA_USER/devel/htdocs
 RUN mkdir -p /var/run/sshd; chmod -rx /var/run/sshd
 RUN ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key -N ''
 RUN ssh-keygen -t dsa -f /etc/ssh/ssh_host_dsa_key -N ''
-RUN ssh-keygen -t ecdsa -f /etc/ssh/ssh_host_ecdsa_key -N ''
 RUN sed -ri 's/#UseDNS yes/UseDNS no/'g /etc/ssh/sshd_config
 
 # Apache configuration
@@ -60,4 +60,4 @@ EXPOSE 22
 # Supervisor
 ADD supervisord.conf /etc/supervisord.conf
 RUN chmod 700 /etc/supervisord.conf
-CMD ["/usr/bin/supervisord", "--configuration", "/etc/supervisord.conf"]
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]

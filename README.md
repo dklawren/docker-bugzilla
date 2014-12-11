@@ -1,45 +1,83 @@
-#### docker-bugzilla
+Docker Bugzilla
+===============
 
 Configure a running Bugzilla system using Docker
 
-##### Features:
+## Features
 
-* Running latest Fedora (20)
+* Running latest Centos
 * Preconfigured with initial data and test product
 * Running Apache2 and MySQL Community Server 5.6
 * Openssh server so you can ssh in to the system to make changes
-* Code resides in `/home/bugzilla/devel/htdocs/bugzilla` and can be updated using standard git commands
+* Code resides in `/home/bugzilla/devel/htdocs/bugzilla` and can be updated,
+  diffed, and branched using standard git commands
 
-##### How to build
+## How to install Docker and Fig
 
-If you need to build the base image for yourself,  just change to the directory containing the checked out
+### Linux Workstation
+
+1. Visit [Docker][docker] and get docker up and running on your system.
+
+2. Visit [Fig][fig] to install Fig for managing Docker containers.
+
+### OSX Workstation
+
+1. Visit [Docker][docker] and get docker up and running on your system.
+
+2. Visit [Fig][fig] to install Fig for managing multiple related Docker containers.
+
+3. Start boot2docker in a terminal once it is installed. Ensure that you run the 
+ export DOCKER_HOST=... lines when prompted:
+
+```bash
+$ boot2docker start
+$ export DOCKER_HOST=tcp://192.168.59.103:2375
+```
+
+### Windows Workstation
+
+Windows based developers will be best served by installing [Vagrant][vagrant] and
+relying on a shim VM to run Docker. Follow the instructions in the installer until
+you reach the ``vagrant init`` section. Instead of doing ``vagrant init hashicorp/precise32`` do:
+
+```bash
+vagrant init ubuntu/trusty64
+```
+From there resume the install process and finish with:
+
+```bash
+vagrant ssh
+```
+
+## How to build Bugzilla Docker image
+
+To build a fresh image, just change to the directory containing the checked out
 files and run the below command:
 
 ```bash
-$ docker build -rm -t <my_name>/docker-bugzilla .
+$ fig build
 ```
 
-The `-rm` switch removes any interim containers automatically while the image is being created.
+## How to start Bugzilla Docker image
 
-##### How to start
+To start a new container (or rerun your last container) you simply do:
 
 ```bash
-$ docker run -d -t \
-    --name bugzilla \
-    --hostname bugzilla \
-    --publish 8080:80 \
-    --publish 2222:22 \
-    dklawren/docker-bugzilla
+$ fig up
 ```
 
-This will pull down the docker image from the Docker Registry and start it for you
+This will stay in the foreground and you will see the output from `supervisord`. You
+can use the `-d` option to run the container in the background.
 
-To stop and remove the container, you can do:
+To stop, start or remove the container that was created from the last run, you can do:
 
 ```bash
-$ docker stop bugzilla
-$ docker rm bugzilla
+$ fig stop
+$ fig start
+$ fig rm
 ```
+
+## How to access the Bugzilla container
 
 You can point your browser to `http://localhost:8080/bugzilla` to see the the Bugzilla home page.
 You can ssh into the container using `ssh bugzilla@localhost -p2222`. The password is `bugzilla`.
@@ -47,7 +85,3 @@ The above command that starts the container is also in the `bugzilla_start.sh` f
 is cache locally, starting the container should happen very quickly. You can run multiple containers
 but you will need to give each one a different name/hostname as well as non-conflicting ports numbers
 for ssh and httpd.
-
-
-
-
