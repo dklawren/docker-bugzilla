@@ -1,4 +1,4 @@
-FROM centos:centos6
+FROM centos:centos7
 MAINTAINER David Lawrence <dkl@mozilla.com>
 
 ADD CLOBBER /CLOBBER
@@ -10,13 +10,13 @@ ENV BUGZILLA_REPO https://github.com/bugzilla/bugzilla.git
 ENV BUGZILLA_BRANCH 4.4
 
 # Software installation
-RUN yum -y install https://dev.mysql.com/get/mysql-community-release-el6-5.noarch.rpm && yum clean all
+RUN yum -y install https://dev.mysql.com/get/mysql-community-release-el7-5.noarch.rpm && yum clean all
 RUN yum -y install epel-release && yum clean all
 RUN yum -y install supervisor mod_perl mod_perl-devel openssh-server openssh \
-                   mysql-community-server git sudo perl-perl-devel perl-CPAN \
-                   mysql-community-devel curl tar gzip gcc gcc-c++ make \
-                   vim-enhanced perl-Software-License gd-devel perl-XML-Parser \
-                   openssl-devel ImageMagick-devel graphviz patch postfix && yum clean all
+                   passwd mysql-community-server mysql-community-devel git sudo \
+                   perl-App-cpanminus curl tar gzip gcc gcc-c++ make unzip \
+                   vim-enhanced openssl-devel gmp-devel gd-devel postfix graphviz \
+                   patch aspell-devel && yum clean all
 
 # User configuration
 RUN useradd -m -G wheel -u 1000 -s /bin/bash $BUGZILLA_USER
