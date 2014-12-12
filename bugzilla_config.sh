@@ -1,7 +1,7 @@
 #!/bin/bash
 
 BUGZILLA_HOME="/home/$BUGZILLA_USER/devel/htdocs/bugzilla"
-CPANM="cpanm --quiet --notest --skip-installed"
+CPANM="cpanm --quiet --notest --skip-satisfied"
 
 # Clone the code repo
 git clone $BUGZILLA_REPO -b $BUGZILLA_BRANCH $BUGZILLA_HOME
