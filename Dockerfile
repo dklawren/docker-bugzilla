@@ -1,6 +1,8 @@
 FROM centos:centos6
 MAINTAINER David Lawrence <dkl@mozilla.com>
 
+ADD CLOBBER /CLOBBER
+
 # Environment
 ENV container docker
 ENV BUGZILLA_USER bugzilla
