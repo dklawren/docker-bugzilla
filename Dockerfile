@@ -8,6 +8,8 @@ ENV container docker
 ENV BUGZILLA_USER bugzilla
 ENV BUGZILLA_REPO https://github.com/bugzilla/bugzilla.git
 ENV BUGZILLA_BRANCH 4.4
+ENV BUGZILLA_HOME /home/$BUGZILLA_USER/devel/htdocs/bugzilla
+ENV CPANM cpanm --quiet --notest --skip-satisfied
 
 # Software installation
 RUN yum -y install https://dev.mysql.com/get/mysql-community-release-el7-5.noarch.rpm && yum clean all
@@ -22,7 +24,6 @@ RUN yum -y install supervisor mod_perl mod_perl-devel openssh-server openssh \
 RUN useradd -m -G wheel -u 1000 -s /bin/bash $BUGZILLA_USER
 RUN passwd -u -f $BUGZILLA_USER
 RUN echo "bugzilla:bugzilla" | chpasswd
-RUN mkdir -p /home/$BUGZILLA_USER/devel/htdocs
 
 # sshd
 RUN mkdir -p /var/run/sshd; chmod -rx /var/run/sshd
@@ -43,6 +44,21 @@ RUN /usr/bin/mysql_install_db --user=$BUGZILLA_USER --basedir=/usr --datadir=/va
 # Sudoer configuration
 ADD sudoers /etc/sudoers
 RUN chown root.root /etc/sudoers; chmod 440 /etc/sudoers
+
+# Clone the code repo
+RUN su $BUGZILLA_USER -c "git clone $BUGZILLA_REPO -b $BUGZILLA_BRANCH $BUGZILLA_HOME"
+
+# Install Perl dependencies
+# Some modules are explicitly installed due to strange dependency issues
+RUN cd $BUGZILLA_HOME \
+    && $CPANM DBD::mysql \
+    && $CPANM HTTP::Tiny \
+    && $CPANM HTML::TreeBuilder \
+    && $CPANM HTML::Element \
+    && $CPANM HTML::FormatText \
+    && $CPANM Apache2::SizeLimit \
+    && $CPANM Software::License \
+    && $CPANM --installdeps --with-recommends .
 
 # Bugzilla configuration
 ADD checksetup_answers.txt /checksetup_answers.txt
