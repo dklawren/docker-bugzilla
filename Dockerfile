@@ -6,19 +6,21 @@ ADD CLOBBER /CLOBBER
 # Environment
 ENV container docker
 ENV BUGZILLA_USER bugzilla
-ENV BUGZILLA_REPO https://github.com/bugzilla/bugzilla.git
-ENV BUGZILLA_BRANCH 4.4
-ENV BUGZILLA_HOME /home/$BUGZILLA_USER/devel/htdocs/bugzilla
+ENV BUGZILLA_REPO https://git.mozilla.org/webtools/bmo/bugzilla.git
+ENV BUGZILLA_BRANCH master
+ENV BUGZILLA_HOME /home/$BUGZILLA_USER/devel/htdocs/bmo
 ENV CPANM cpanm --quiet --notest --skip-satisfied
 
 # Software installation
-RUN yum -y install https://dev.mysql.com/get/mysql-community-release-el7-5.noarch.rpm && yum clean all
-RUN yum -y install epel-release && yum clean all
-RUN yum -y install supervisor mod_perl mod_perl-devel openssh-server openssh \
-                   passwd mysql-community-server mysql-community-devel git sudo \
-                   perl-App-cpanminus curl tar gzip gcc gcc-c++ make unzip \
-                   vim-enhanced openssl-devel gmp-devel gd-devel postfix graphviz \
-                   patch aspell-devel && yum clean all
+RUN yum -q -y install https://dev.mysql.com/get/mysql-community-release-el7-5.noarch.rpm \
+                      && yum clean all
+RUN yum -q -y install epel-release && yum clean all
+RUN yum -q -y install supervisor mod_perl mod_perl-devel openssh-server openssh \
+                      passwd mysql-community-server mysql-community-devel git sudo \
+                      perl-App-cpanminus curl tar gzip gcc gcc-c++ make unzip \
+                      mpfr-devel vim-enhanced openssl-devel gmp-devel gd-devel \
+                      postfix graphviz ImageMagick-devel patch aspell-devel \
+                      && yum clean all
 
 # User configuration
 RUN useradd -m -G wheel -u 1000 -s /bin/bash $BUGZILLA_USER
@@ -58,12 +60,16 @@ RUN cd $BUGZILLA_HOME \
     && $CPANM HTML::FormatText \
     && $CPANM Apache2::SizeLimit \
     && $CPANM Software::License \
+    && $CPANM Image::Magick@6.77 \
+    && $CPANM Fatal \
+    && $CPANM XMLRPC::Lite \
     && $CPANM --installdeps --with-recommends .
 
 # Bugzilla configuration
 ADD checksetup_answers.txt /checksetup_answers.txt
+ADD generate_bmo_data.pl /generate_bmo_data.pl
 ADD bugzilla_config.sh /bugzilla_config.sh
-RUN chmod 755 /bugzilla_config.sh
+RUN chmod 755 /bugzilla_config.sh /generate_bmo_data.pl
 RUN /bugzilla_config.sh
 
 # Final permissions fix

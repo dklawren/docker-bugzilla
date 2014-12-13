@@ -79,9 +79,19 @@ $ fig rm
 
 ## How to access the Bugzilla container
 
-You can point your browser to `http://localhost:8080/bugzilla` to see the the Bugzilla home page.
-You can ssh into the container using `ssh bugzilla@localhost -p2222`. The password is `bugzilla`.
-The above command that starts the container is also in the `bugzilla_start.sh` file. Once the image
-is cache locally, starting the container should happen very quickly. You can run multiple containers
-but you will need to give each one a different name/hostname as well as non-conflicting ports numbers
-for ssh and httpd.
+You can point your browser to `http://localhost:8080/bugzilla` to see the the
+Bugzilla home page. The Administrator username is `admin@mozilla.bugs` and the
+password is `password`. You can use the Administrator account to creat other
+users, add products or components, etc.
+
+You can also ssh into the container using `ssh bugzilla@localhost -p2222` command.
+The password  is `bugzilla`. You can run multiple containers but you will need
+to give each one a different name/hostname as well as non-conflicting ports
+numbers for ssh and httpd.
+
+## TODO
+
+* Update `generate_bmo_data.pl` to include more sample products, groups and
+settings to more closely match bugzilla.mozilla.org.
+* Enable SSL support.
+* Enable memcached
