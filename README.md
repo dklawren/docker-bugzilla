@@ -79,7 +79,7 @@ $ fig rm
 
 ## How to access the Bugzilla container
 
-You can point your browser to `http://localhost:8080/bugzilla` to see the the
+You can point your browser to `http://localhost:8080/bmo` to see the the
 Bugzilla home page. The Administrator username is `admin@mozilla.bugs` and the
 password is `password`. You can use the Administrator account to creat other
 users, add products or components, etc.
