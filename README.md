@@ -95,3 +95,7 @@ numbers for ssh and httpd.
 settings to more closely match bugzilla.mozilla.org.
 * Enable SSL support.
 * Enable memcached
+
+[docker]: https://docs.docker.com/installation/
+[fig]: http://www.fig.sh
+[vagrant]: https://docs.vagrantup.com/v2/getting-started/
