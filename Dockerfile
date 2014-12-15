@@ -70,6 +70,11 @@ RUN /bugzilla_config.sh
 RUN chmod 711 /home/$BUGZILLA_USER
 RUN chown -R $BUGZILLA_USER.$BUGZILLA_USER /home/$BUGZILLA_USER
 
+# Run any custom configuration
+ADD my_config.sh /my_config.sh
+RUN chmod 755 /my_config.sh
+RUN /my_config.sh
+
 # Networking
 RUN echo "NETWORKING=yes" > /etc/sysconfig/network
 EXPOSE 80
