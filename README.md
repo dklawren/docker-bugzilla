@@ -93,3 +93,7 @@ numbers for ssh and httpd.
 
 * Enable SSL support.
 * Enable memcached
+
+[docker]: https://docs.docker.com/installation/
+[fig]: http://www.fig.sh
+[vagrant]: https://docs.vagrantup.com/v2/getting-started/
