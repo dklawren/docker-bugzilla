@@ -58,6 +58,7 @@ RUN cd $BUGZILLA_HOME \
     && $CPANM HTML::FormatText \
     && $CPANM Apache2::SizeLimit \
     && $CPANM Software::License \
+    && $CPANM Email::Sender \
     && $CPANM --installdeps --with-recommends .
 
 # Bugzilla configuration
