@@ -12,13 +12,15 @@ ENV BUGZILLA_HOME /home/$BUGZILLA_USER/devel/htdocs/bugzilla
 ENV CPANM cpanm --quiet --notest --skip-satisfied
 
 # Software installation
-RUN yum -y install https://dev.mysql.com/get/mysql-community-release-el7-5.noarch.rpm && yum clean all
-RUN yum -y install epel-release && yum clean all
-RUN yum -y install supervisor mod_perl mod_perl-devel openssh-server openssh \
-                   passwd mysql-community-server mysql-community-devel git sudo \
-                   perl-App-cpanminus curl tar gzip gcc gcc-c++ make unzip \
-                   vim-enhanced openssl-devel gmp-devel gd-devel postfix graphviz \
-                   patch aspell-devel && yum clean all
+RUN yum -y -q install https://dev.mysql.com/get/mysql-community-release-el7-5.noarch.rpm \
+    && yum clean all
+RUN yum -y -q install epel-release \
+    && yum clean all
+RUN yum -y -q install supervisor mod_perl mod_perl-devel openssh-server openssh \
+    passwd mysql-community-server mysql-community-devel git sudo \
+    perl-App-cpanminus tar gcc gcc-c++ make unzip vim-enhanced \
+    openssl-devel gmp-devel gd-devel postfix graphviz patch \
+    aspell-devel && yum clean all
 
 # User configuration
 RUN useradd -m -G wheel -u 1000 -s /bin/bash $BUGZILLA_USER
@@ -29,6 +31,7 @@ RUN echo "bugzilla:bugzilla" | chpasswd
 RUN mkdir -p /var/run/sshd; chmod -rx /var/run/sshd
 RUN ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key -N ''
 RUN ssh-keygen -t dsa -f /etc/ssh/ssh_host_dsa_key -N ''
+RUN ssh-keygen -t ecdsa -f /etc/ssh/ssh_host_ecdsa_key -N ''
 RUN sed -ri 's/#UseDNS yes/UseDNS no/'g /etc/ssh/sshd_config
 
 # Apache configuration
@@ -52,13 +55,14 @@ RUN su $BUGZILLA_USER -c "git clone $BUGZILLA_REPO -b $BUGZILLA_BRANCH $BUGZILLA
 # Some modules are explicitly installed due to strange dependency issues
 RUN cd $BUGZILLA_HOME \
     && $CPANM DBD::mysql \
-    && $CPANM HTTP::Tiny \
     && $CPANM HTML::TreeBuilder \
-    && $CPANM HTML::Element \
     && $CPANM HTML::FormatText \
     && $CPANM Apache2::SizeLimit \
     && $CPANM Software::License \
     && $CPANM Email::Sender \
+    && $CPANM Net::SMTP::SSL \
+    && $CPANM HTML::FormatText::WithLinks \
+    && $CPANM Text::Markdown \
     && $CPANM --installdeps --with-recommends .
 
 # Bugzilla configuration
