@@ -63,6 +63,7 @@ RUN cd $BUGZILLA_HOME \
     && $CPANM Image::Magick@6.77 \
     && $CPANM Fatal \
     && $CPANM XMLRPC::Lite \
+    && $CPANM Email::Sender \
     && $CPANM --installdeps --with-recommends .
 
 # Bugzilla configuration
