@@ -1,5 +1,8 @@
 bugzilla:
   build: .
   ports:
-    - "8080:80"
+    - "80:80"
     - "2222:22"
+  volumes:
+    - "/home/dkl/devel/:/home/bugzilla/devel/"
+    - "/home/dkl/data/bzdev/mysql/:/var/lib/mysql/"
