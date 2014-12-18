@@ -1,5 +1,5 @@
  $answer{'db_host'}   = 'localhost';
- $answer{'db_driver'} = 'mysql';
+ $answer{'db_driver'} = 'Pg';
  $answer{'db_port'}   = 0;
  $answer{'db_name'}   = 'bugs',
  $answer{'db_user'}   = 'bugs';

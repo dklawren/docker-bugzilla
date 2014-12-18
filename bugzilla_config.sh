@@ -1,9 +1,10 @@
 #!/bin/bash
 
 # Configure database
-/usr/bin/mysqld_safe &
-sleep 5
-mysql -u root mysql -e "GRANT ALL PRIVILEGES ON *.* TO bugs@localhost IDENTIFIED BY 'bugs'; FLUSH PRIVILEGES;"
+su postgres -c "/usr/bin/pg_ctl -D /var/lib/pgsql/data start" && sleep 5
+su postgres -c "createuser --superuser bugs"
+su postgres -c "psql -U postgres -d postgres -c \"alter user bugs with password 'bugs';\""
 cd $BUGZILLA_HOME
 perl checksetup.pl /checksetup_answers.txt
-mysqladmin -u root shutdown
+su postgres -c "/usr/bin/pg_ctl -D /var/lib/pgsql/data stop"
+
