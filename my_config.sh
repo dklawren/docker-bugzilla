@@ -1,7 +1,7 @@
 #!/bin/bash
 # Add any custom setup instructions here
 
-export $HOME=/home/$BUGZILLA_USER
+export HOME=/home/$BUGZILLA_USER
 
 # Custom dependencies
 $CPANM IPC::System::Simple
