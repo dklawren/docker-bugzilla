@@ -20,7 +20,8 @@ RUN yum -y -q install supervisor mod_perl mod_perl-devel openssh-server openssh 
     passwd mysql-community-server mysql-community-devel git sudo perl-App-cpanminus \
     tar gcc gcc-c++ make unzip mpfr-devel vim-enhanced openssl-devel gmp-devel \
     gd-devel postfix graphviz ImageMagick-devel patch aspell-devel ctags perl-CPAN \
-    python-sphinx texlive-latex-bin-bin texlive-texconfig-bin && yum clean all
+    python-sphinx texlive-latex-bin-bin texlive-texconfig-bin patchutils \
+    && yum clean all
 
 # User configuration
 RUN useradd -m -G wheel -u 1000 -s /bin/bash $BUGZILLA_USER
