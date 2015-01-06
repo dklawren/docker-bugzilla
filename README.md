@@ -59,7 +59,7 @@ Then all you need to do on later occasions is:
 boot2docker start && boot2docker ssh
 ```
 
-2. cd `/c/Users/Username/src/bmo/contrib/docker` (paths under c:\Users are
+2. cd `/c/Users/Username/src/bugzilla/contrib/docker` (paths under c:\Users are
    automatically mapped by boot2docker from the client into the VM)
 3. `fig build` (and so on)`
 
@@ -87,11 +87,11 @@ You can find the IP address by running `boot2docker ip`.
 For example, using a text editor, change the following line in
 `checksetup_answers.txt` from:
 
-` $answer{'urlbase'} = 'http://localhost:8080/bmo/';`
+` $answer{'urlbase'} = 'http://localhost:8080/bugzilla/';`
 
 to
 
-` $answer{'urlbase'} = 'http://192.168.59.103:8080/bmo/';`
+` $answer{'urlbase'} = 'http://192.168.59.103:8080/bugzilla/';`
 
 ## How to build Bugzilla Docker image
 
@@ -124,7 +124,7 @@ $ fig rm
 ## How to access the Bugzilla container
 
 If you are using Linux, you can simply point your browser to
-`http://localhost:8080/bmo` to see the the Bugzilla home page.
+`http://localhost:8080/bugzilla` to see the the Bugzilla home page.
 
 If using boot2docker, you will need to use the IP address of the VM. You can
 find the IP address using the `boot2docker ip` command. For example:
@@ -135,7 +135,7 @@ $ boot2docker ip
 
 ```
 
-So would then point your browser to `http://192.168.59.103:8080/bmo`.
+So would then point your browser to `http://192.168.59.103:8080/bugzilla`.
 
 The Administrator username is `admin@example.com` and the password is `password`.
 You can use the Administrator account to creat other users, add products or
