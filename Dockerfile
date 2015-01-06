@@ -67,6 +67,7 @@ RUN cd $BUGZILLA_HOME \
     && $CPANM Net::SMTP::SSL \
     && $CPANM HTML::FormatText::WithLinks \
     && $CPANM Text::Markdown \
+    && $CPANM Locale::Language \
     && $CPANM --installdeps --with-recommends .
 
 # Bugzilla configuration
