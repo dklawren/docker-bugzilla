@@ -55,6 +55,7 @@ RUN su $BUGZILLA_USER -c "git clone $BUGZILLA_REPO -b $BUGZILLA_BRANCH $BUGZILLA
 # Install Perl dependencies
 # Some modules are explicitly installed due to strange dependency issues
 RUN cd $BUGZILLA_HOME \
+    && $CPANM autodie \
     && $CPANM DBD::mysql \
     && $CPANM HTML::TreeBuilder \
     && $CPANM HTML::FormatText \
