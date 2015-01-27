@@ -18,7 +18,7 @@ RUN yum -y -q install epel-release \
     && yum clean all
 RUN yum -y -q install supervisor mod_perl mod_perl-devel openssh-server openssh \
     passwd mysql-community-server mysql-community-devel git sudo perl-App-cpanminus \
-    tar gcc gcc-c++ make unzip mpfr-devel vim-enhanced openssl-devel gmp-devel \
+    tar gcc gcc-c++ make unzip mpfr-devel vim-enhanced openssl-devel gmp-devel rsh \
     gd-devel postfix graphviz ImageMagick-devel patch aspell-devel ctags perl-CPAN \
     python-sphinx texlive-latex-bin-bin texlive-texconfig-bin patchutils bzr cvs \
     && yum clean all
