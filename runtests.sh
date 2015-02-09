@@ -35,7 +35,7 @@ sleep 5
 
 echo -e "\n== Cloning QA test suite"
 cd $BUGZILLA_HOME
-/usr/bin/git clone $BUGZILLA_QA_REPO -b $BUGZILLA_REPO_BRANCH qa
+/usr/bin/git clone $BUGZILLA_QA_REPO -b $BUGZILLA_QA_BRANCH qa
 
 echo -e "\n== Updating configuration"
 sed -e "s?%BUGS_DB_DRIVER%?$BUGS_DB_DRIVER?g" --in-place qa/config/checksetup_answers.txt

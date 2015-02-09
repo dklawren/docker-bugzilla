@@ -11,8 +11,9 @@ ENV BUGS_DB_PASS bugs
 ENV BUGS_DB_HOST localhost
 ENV BUGZILLA_USER bugzilla
 ENV BUGZILLA_REPO https://git.mozilla.org/bugzilla/bugzilla.git
-ENV BUGZILLA_QA_REPO https://git.mozilla.org/bugzilla/qa.git
 ENV BUGZILLA_REPO_BRANCH 4.4
+ENV BUGZILLA_QA_REPO https://git.mozilla.org/bugzilla/qa.git
+ENV BUGZILLA_QA_BRANCH 4.4
 ENV BUGZILLA_HOME /home/$BUGZILLA_USER/devel/htdocs/bugzilla
 ENV BUGZILLA_URL http://localhost/bugzilla
 ENV ADMIN_EMAIL admin@
