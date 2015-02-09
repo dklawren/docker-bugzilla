@@ -11,9 +11,9 @@ ENV BUGS_DB_PASS bugs
 ENV BUGS_DB_HOST localhost
 ENV BUGZILLA_USER bugzilla
 ENV BUGZILLA_REPO https://git.mozilla.org/webtools/bmo/bugzilla.git
+ENV BUGZILLA_REPO_BRANCH master
 ENV BUGZILLA_QA_REPO https://git.mozilla.org/webtools/bmo/qa.git
 ENV BUGZILLA_QA_BRANCH 4.2
-ENV BUGZILLA_REPO_BRANCH master
 ENV BUGZILLA_HOME /home/$BUGZILLA_USER/devel/htdocs/bmo
 ENV BUGZILLA_URL http://localhost/bmo
 ENV ADMIN_EMAIL admin@mozilla.com
