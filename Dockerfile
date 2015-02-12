@@ -3,20 +3,29 @@ MAINTAINER David Lawrence <dkl@mozilla.com>
 
 ADD CLOBBER /CLOBBER
 
-# Environment
+# Environment configuration
 ENV container docker
+ENV BUGS_DB_DRIVER mysql
+ENV BUGS_DB_NAME bugs
+ENV BUGS_DB_PASS bugs
+ENV BUGS_DB_HOST localhost
 ENV BUGZILLA_USER bugzilla
-ENV BUGZILLA_REPO https://github.com/bugzilla/bugzilla.git
-ENV BUGZILLA_BRANCH 4.4
+ENV BUGZILLA_REPO https://git.mozilla.org/bugzilla/bugzilla.git
+ENV BUGZILLA_REPO_BRANCH 4.4
+ENV BUGZILLA_QA_REPO https://git.mozilla.org/bugzilla/qa.git
+ENV BUGZILLA_QA_BRANCH 4.4
 ENV BUGZILLA_HOME /home/$BUGZILLA_USER/devel/htdocs/bugzilla
+ENV BUGZILLA_URL http://localhost/bugzilla
+ENV ADMIN_EMAIL admin@
+ENV ADMIN_PASS password
+ENV TEST_SUITE sanity
 ENV CPANM cpanm --quiet --notest --skip-satisfied
 
 # Software installation
-RUN yum -y install epel-release && yum clean all
-RUN yum -y install supervisor mod_perl mod_perl-devel openssh-server openssh \
-    passwd postgresql-server postgresql-devel git sudo perl-App-cpanminus \
-    perl-CPAN tar gcc gcc-c++ make unzip vim-enhanced openssl-devel gmp-devel \
-    gd-devel postfix graphviz patch aspell-devel && yum clean all
+ADD rpm_list /rpm_list
+RUN yum -y -q install epel-release \
+    && yum clean all
+RUN yum -y -q install `cat /rpm_list` && yum clean all
 
 # User configuration
 RUN useradd -m -G wheel -u 1000 -s /bin/bash $BUGZILLA_USER
@@ -45,19 +54,24 @@ ADD sudoers /etc/sudoers
 RUN chown root.root /etc/sudoers; chmod 440 /etc/sudoers
 
 # Clone the code repo
-RUN su $BUGZILLA_USER -c "git clone $BUGZILLA_REPO -b $BUGZILLA_BRANCH $BUGZILLA_HOME"
+RUN su $BUGZILLA_USER -c "git clone $BUGZILLA_REPO -b $BUGZILLA_REPO_BRANCH $BUGZILLA_HOME"
 
 # Install Perl dependencies
 # Some modules are explicitly installed due to strange dependency issues
 RUN cd $BUGZILLA_HOME \
-    && $CPANM DBD::Pg \
-    && $CPANM HTML::TreeBuilder \
-    && $CPANM HTML::FormatText \
+    && $CPANM autodie \
     && $CPANM Apache2::SizeLimit \
-    && $CPANM Software::License \
+    && $CPANM DBD::Pg \
     && $CPANM Email::Sender \
-    && $CPANM Net::SMTP::SSL \
+    && $CPANM File::Copy::Recursive \
+    && $CPANM File::Which \
+    && $CPANM HTML::FormatText \
     && $CPANM HTML::FormatText::WithLinks \
+    && $CPANM HTML::TreeBuilder \
+    && $CPANM Net::SMTP::SSL \
+    && $CPANM Pod::Checker \
+    && $CPANM Software::License \
+    && $CPANM Test::WWW::Selenium \
     && $CPANM Text::Markdown \
     && $CPANM --installdeps --with-recommends .
 
@@ -80,6 +94,10 @@ RUN /my_config.sh
 RUN echo "NETWORKING=yes" > /etc/sysconfig/network
 EXPOSE 80
 EXPOSE 22
+
+# Testing script for CI
+ADD runtests.sh /runtests.sh
+RUN chmod 755 /runtests.sh
 
 # Supervisor
 ADD supervisord.conf /etc/supervisord.conf
