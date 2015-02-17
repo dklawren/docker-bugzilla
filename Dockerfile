@@ -9,14 +9,16 @@ ENV BUGS_DB_DRIVER mysql
 ENV BUGS_DB_NAME bugs
 ENV BUGS_DB_PASS bugs
 ENV BUGS_DB_HOST localhost
+
 ENV BUGZILLA_USER bugzilla
-ENV BUGZILLA_REPO https://git.mozilla.org/bugzilla/bugzilla.git
-ENV BUGZILLA_REPO_BRANCH 4.4
-ENV BUGZILLA_QA_REPO https://git.mozilla.org/bugzilla/qa.git
-ENV BUGZILLA_QA_BRANCH 4.4
 ENV BUGZILLA_HOME /home/$BUGZILLA_USER/devel/htdocs/bugzilla
 ENV BUGZILLA_URL http://localhost/bugzilla
-ENV ADMIN_EMAIL admin@
+
+ENV GITHUB_BASE_GIT https://github.com/bugzilla/bugzilla
+ENV GITHUB_BASE_BRANCH 4.4
+ENV GITHUB_QA_GIT https://github.com/bugzilla/qa
+
+ENV ADMIN_EMAIL admin@bugzilla.org
 ENV ADMIN_PASS password
 ENV TEST_SUITE sanity
 ENV CPANM cpanm --quiet --notest --skip-satisfied
@@ -56,7 +58,7 @@ ADD sudoers /etc/sudoers
 RUN chown root.root /etc/sudoers; chmod 440 /etc/sudoers
 
 # Clone the code repo
-RUN su $BUGZILLA_USER -c "git clone $BUGZILLA_REPO -b $BUGZILLA_REPO_BRANCH $BUGZILLA_HOME"
+RUN su $BUGZILLA_USER -c "git clone $GITHUB_BASE_GIT -b $GITHUB_BASE_BRANCH $BUGZILLA_HOME"
 
 # Install Perl dependencies
 # Some modules are explicitly installed due to strange dependency issues
