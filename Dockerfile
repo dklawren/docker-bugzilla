@@ -70,6 +70,7 @@ RUN cd $BUGZILLA_HOME \
     && $CPANM HTML::TreeBuilder \
     && $CPANM Net::SMTP::SSL \
     && $CPANM Pod::Checker \
+    && $CPANM Pod::Coverage \
     && $CPANM Software::License \
     && $CPANM Test::WWW::Selenium \
     && $CPANM Text::Markdown \

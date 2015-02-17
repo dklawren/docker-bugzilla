@@ -5,6 +5,9 @@
 
 set -e
 
+# Output to log file as well as STDOUT/STDERR
+exec > >(tee /runtests.log) 2>&1
+
 echo "== Refreshing Bugzilla code"
 cd $BUGZILLA_HOME
 git stash
