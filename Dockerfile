@@ -6,18 +6,20 @@ ADD CLOBBER /CLOBBER
 # Environment configuration
 ENV container docker
 ENV BUGS_DB_DRIVER mysql
-ENV BUGS_DB_NAME bugs_docker
+ENV BUGS_DB_NAME bugs
 ENV BUGS_DB_PASS bugs
 ENV BUGS_DB_USER bugs
 ENV BUGS_DB_HOST localhost
+
 ENV BUGZILLA_USER bugzilla
-ENV BUGZILLA_REPO https://git.mozilla.org/webtools/bmo/bugzilla.git
-ENV BUGZILLA_QA_REPO https://git.mozilla.org/webtools/bmo/qa.git
-ENV BUGZILLA_QA_BRANCH 4.2
-ENV BUGZILLA_REPO_BRANCH master
-ENV BUGZILLA_HOME /home/$BUGZILLA_USER/devel/htdocs/bmo-docker
-ENV BUGZILLA_URL http://localhost/bmo-docker
-ENV ADMIN_EMAIL admin@mozilla.com
+ENV BUGZILLA_HOME /home/$BUGZILLA_USER/devel/htdocs/bmo
+ENV BUGZILLA_URL http://localhost/bmo
+
+ENV GITHUB_BASE_GIT https://github.com/mozilla/webtools-bmo-bugzilla
+ENV GITHUB_BASE_BRANCH master
+ENV GITHUB_QA_GIT https://github.com/bugzilla/qa
+
+ENV ADMIN_EMAIL admin@mozilla.org
 ENV ADMIN_PASS password
 ENV TEST_SUITE sanity
 ENV CPANM cpanm --quiet --notest --skip-satisfied
@@ -57,7 +59,7 @@ ADD sudoers /etc/sudoers
 RUN chown root.root /etc/sudoers; chmod 440 /etc/sudoers
 
 # Clone the code repo
-RUN su $BUGZILLA_USER -c "git clone $BUGZILLA_REPO -b $BUGZILLA_REPO_BRANCH $BUGZILLA_HOME"
+RUN su $BUGZILLA_USER -c "git clone $GITHUB_BASE_GIT -b $GITHUB_BASE_BRANCH $BUGZILLA_HOME"
 
 # Install Perl dependencies
 # Some modules are explicitly installed due to strange dependency issues
