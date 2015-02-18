@@ -12,7 +12,7 @@ echo "== Refreshing Bugzilla code"
 cd $BUGZILLA_HOME
 git stash
 git checkout -q $GITHUB_BASE_BRANCH
-/usr/bin/git pull -q --rebase
+git pull -q --rebase
 if [ "$GITHUB_BASE_REV" != "" ]; then
     git checkout -q $GITHUB_BASE_REV
 fi
@@ -31,7 +31,7 @@ if [ "$TEST_SUITE" = "docs" ]; then
     exit $?
 fi
 
-echo "\n== Starting services"
+echo -e "\n== Starting services"
 /usr/bin/mysqld_safe &
 /usr/sbin/httpd &
 sleep 5
@@ -53,6 +53,7 @@ sed -e "s?%TRAVIS_BUILD_DIR%?$BUGZILLA_HOME?g" --in-place qa/config/selenium_tes
 
 echo -e "\n== Running checksetup"
 cd $BUGZILLA_HOME
+./checksetup.pl qa/config/checksetup_answers.txt
 ./checksetup.pl qa/config/checksetup_answers.txt
 
 echo -e "\n== Generating test data"
