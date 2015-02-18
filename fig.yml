@@ -3,3 +3,5 @@ bugzilla:
   ports:
     - "8080:80"
     - "2222:22"
+  environment:
+    - "TEST_SUITE=webservices"
