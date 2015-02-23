@@ -72,6 +72,7 @@ RUN cd $BUGZILLA_HOME \
     && $CPANM HTML::FormatText \
     && $CPANM HTML::FormatText::WithLinks \
     && $CPANM HTML::TreeBuilder \
+    && $CPANM Locale::Language \
     && $CPANM Net::SMTP::SSL \
     && $CPANM Pod::Checker \
     && $CPANM Pod::Coverage \
