@@ -19,7 +19,7 @@
  $answer{'diffpath'} = '/usr/bin';
  $answer{'webservergroup'} = 'bugzilla';
  $answer{'ADMIN_OK'} = 'Y';
- $answer{'ADMIN_EMAIL'} = 'admin@example.com';
+ $answer{'ADMIN_EMAIL'} = 'admin@bugzilla.org';
  $answer{'ADMIN_PASSWORD'} = 'password';
  $answer{'ADMIN_REALNAME'} = 'Admin';
  $answer{'NO_PAUSE'} = 1;
