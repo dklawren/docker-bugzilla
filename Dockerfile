@@ -18,7 +18,7 @@ ENV GITHUB_BASE_GIT https://github.com/mozilla/webtools-bmo-bugzilla
 ENV GITHUB_BASE_BRANCH master
 ENV GITHUB_QA_GIT https://github.com/bugzilla/qa
 
-ENV ADMIN_EMAIL admin@mozilla.org
+ENV ADMIN_EMAIL admin@mozilla.bugs
 ENV ADMIN_PASS password
 ENV TEST_SUITE sanity
 ENV CPANM cpanm --quiet --notest --skip-satisfied
