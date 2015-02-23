@@ -80,7 +80,7 @@ if [ "$TEST_SUITE" = "selenium" ]; then
     echo -e "\n== Downloading and starting Selenium server"
     wget http://selenium-release.storage.googleapis.com/2.41/selenium-server-standalone-2.41.0.jar 1> /dev/null
     java -jar selenium-server-standalone-2.41.0.jar -DfirefoxDefaultPath=/usr/lib64/firefox/firefox \
-        -log ~/selenium.log > /devnull 2>&1 &
+        -log ~/selenium.log > /dev/null 2>&1 &
     sleep 5
 
     echo -e "\n== Running Selenium UI tests"
