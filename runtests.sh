@@ -13,12 +13,11 @@ cd $BUGZILLA_HOME
 git stash
 echo "Switching to $GITHUB_BASE_BRANCH ..."
 git checkout -q $GITHUB_BASE_BRANCH
+echo "Updating to latest ..."
+git pull -q --rebase
 if [ "$GITHUB_BASE_REV" != "" ]; then
     echo "Switching to $GITHUB_BASE_REV revision ..."
     git checkout -q $GITHUB_BASE_REV
-else
-    echo "Updating to latest ..."
-    git pull -q --rebase
 fi
 
 if [ "$TEST_SUITE" = "sanity" ]; then
