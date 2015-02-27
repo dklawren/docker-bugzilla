@@ -42,8 +42,6 @@ echo -e "\n== Starting services"
 su postgres -c "/usr/bin/pg_ctl -D /var/lib/pgsql/data start" && sleep 5
 sleep 3
 # Web Server
-sed -e "s?#PerlSwitches?PerlSwitches?g" --in-place /etc/httpd/conf.d/bugzilla.conf
-sed -e "s?#PerlConfigRequire?PerlConfigRequire?g" --in-place /etc/httpd/conf.d/bugzilla.conf
 echo "Starting web server ..."
 /usr/sbin/httpd &
 sleep 3
