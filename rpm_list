@@ -29,6 +29,7 @@ openssl-devel
 passwd
 patch
 patchutils
+perl-core
 perl-App-cpanminus
 perl-CPAN
 postfix

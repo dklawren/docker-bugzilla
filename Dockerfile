@@ -64,7 +64,6 @@ RUN su $BUGZILLA_USER -c "git clone $GITHUB_BASE_GIT -b $GITHUB_BASE_BRANCH $BUG
 # Install Perl dependencies
 # Some modules are explicitly installed due to strange dependency issues
 RUN cd $BUGZILLA_HOME \
-    && $CPANM autodie \
     && $CPANM Apache2::SizeLimit \
     && $CPANM Software::License \
     && $CPANM Image::Magick@6.77 \
