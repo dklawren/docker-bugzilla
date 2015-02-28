@@ -8,31 +8,27 @@ set -e
 # Output to log file as well as STDOUT/STDERR
 exec > >(tee /runtests.log) 2>&1
 
-echo "== Refreshing Bugzilla code"
+echo "== Retrieving Bugzilla code"
+echo "Checking out $GITHUB_BASE_GIT $GITHUB_BASE_BRANCH ..."
+mv $BUGZILLA_HOME "${BUGZILLA_HOME}.back"
+git clone $GITHUB_BASE_GIT --single-branch --depth 1 --branch $GITHUB_BASE_BRANCH $BUGZILLA_HOME
 cd $BUGZILLA_HOME
-git stash
-echo "Switching to $GITHUB_BASE_BRANCH ..."
-git checkout -q $GITHUB_BASE_BRANCH
-echo "Updating to latest ..."
-git pull -q --rebase
 if [ "$GITHUB_BASE_REV" != "" ]; then
-    echo "Switching to $GITHUB_BASE_REV revision ..."
+    echo "Switching to revision $GITHUB_BASE_REV ..."
     git checkout -q $GITHUB_BASE_REV
 fi
 
 if [ "$TEST_SUITE" = "sanity" ]; then
-    echo -e "\n== Running sanity tests"
     cd $BUGZILLA_HOME
-    prove -f -v t/*.t
+    /buildbot_step "Sanity" prove -f -v t/*.t
     exit $?
 fi
 
 if [ "$TEST_SUITE" = "docs" ]; then
-    echo -e "\n== Running documentation build"
     export JADE_PUB=/usr/share/sgml
     export LDP_HOME=/usr/share/sgml/docbook/dsssl-stylesheets-1.79/dtds/decls
     cd $BUGZILLA_HOME/docs
-    perl makedocs.pl --with-pdf
+    /buildbot_step "Documentation" perl makedocs.pl --with-pdf
     exit $?
 fi
 
@@ -59,8 +55,6 @@ sed -e "s?%TRAVIS_BUILD_DIR%?$BUGZILLA_HOME?g" --in-place qa/config/selenium_tes
 
 echo -e "\n== Running checksetup"
 cd $BUGZILLA_HOME
-rm ./data/params*
-rm ./localconfig
 ./checksetup.pl qa/config/checksetup_answers.txt
 ./checksetup.pl qa/config/checksetup_answers.txt
 
@@ -81,15 +75,13 @@ if [ "$TEST_SUITE" = "selenium" ]; then
         -log ~/selenium.log > /dev/null 2>&1 &
     sleep 5
 
-    echo -e "\n== Running Selenium UI tests"
     cd $BUGZILLA_HOME/qa/t
-    prove -f -v -I$BUGZILLA_HOME/lib test_*.t
+    /buildbot_step "Selenium" prove -f -v -I$BUGZILLA_HOME/lib test_*.t
     exit $?
 fi
 
 if [ "$TEST_SUITE" = "webservices" ]; then
-    echo -e "\n== Running WebService tests"
     cd $BUGZILLA_HOME/qa/t
-    prove -f -v -I$BUGZILLA_HOME/lib webservice_*.t
+    /buildbot_step "Webservices" prove -f -v -I$BUGZILLA_HOME/lib webservice_*.t
     exit $?
 fi

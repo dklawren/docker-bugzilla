@@ -106,6 +106,8 @@ EXPOSE 80
 EXPOSE 22
 
 # Testing script for CI
+RUN wget https://raw.githubusercontent.com/taskcluster/buildbot-step/master/buildbot_step -O /buildbot_step
+RUN chmod 755 /buildbot_step
 ADD runtests.sh /runtests.sh
 RUN chmod 755 /runtests.sh
 
