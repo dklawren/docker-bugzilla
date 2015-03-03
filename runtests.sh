@@ -71,8 +71,7 @@ if [ "$TEST_SUITE" = "selenium" ]; then
 
     echo -e "\n== Downloading and starting Selenium server"
     wget http://selenium-release.storage.googleapis.com/2.45/selenium-server-standalone-2.45.0.jar 1> /dev/null
-    java -jar selenium-server-standalone-2.45.0.jar -DfirefoxDefaultPath=/usr/lib64/firefox/firefox \
-        -log ~/selenium.log > /dev/null 2>&1 &
+    java -jar selenium-server-standalone-2.45.0.jar -log /selenium.log -browserSessionReuse > /dev/null 2>&1 &
     sleep 5
 
     cd $BUGZILLA_HOME/qa/t
