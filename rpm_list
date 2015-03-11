@@ -15,7 +15,7 @@ java-1.7.0-openjdk
 lynx
 make
 memcached
-mod_per
+mod_perl
 mod_perl-devel
 mysql-community-devel
 mysql-community-server
