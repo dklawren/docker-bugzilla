@@ -63,6 +63,7 @@ RUN su $BUGZILLA_USER -c "git clone $GITHUB_BASE_GIT -b $GITHUB_BASE_BRANCH $BUG
 RUN cd $BUGZILLA_HOME \
     && $CPANM Apache2::SizeLimit \
     && $CPANM DBD::Pg \
+    && $CPANM Cache::Memcached \
     && $CPANM Email::Sender \
     && $CPANM File::Copy::Recursive \
     && $CPANM File::Which \

@@ -37,10 +37,16 @@ echo -e "\n== Starting services"
 # Database start
 su postgres -c "/usr/bin/pg_ctl -D /var/lib/pgsql/data start" && sleep 5
 sleep 3
-# Web Server
+# Web Server Start
 echo "Starting web server ..."
 /usr/sbin/httpd &
 sleep 3
+if [ "$GITHUB_BASE_BRANCH" = "master" ] || [ "$GITHUB_BASE_BRANCH" = "5.0" ]; then
+    # Memcached Start
+    echo "Starting memcached server ..."
+    /usr/bin/memcached -u memcached -d
+    sleep 3
+fi
 
 echo -e "\n== Cloning QA test suite"
 cd $BUGZILLA_HOME
