@@ -69,6 +69,7 @@ RUN cd $BUGZILLA_HOME \
     && $CPANM Image::Magick@6.77 \
     && $CPANM Fatal \
     && $CPANM XMLRPC::Lite \
+    && $CPANM Cache::Memcached \
     && $CPANM DBD::mysql \
     && $CPANM Email::Sender \
     && $CPANM File::Copy::Recursive \
