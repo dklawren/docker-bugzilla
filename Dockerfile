@@ -64,6 +64,7 @@ RUN su $BUGZILLA_USER -c "git clone $GITHUB_BASE_GIT -b $GITHUB_BASE_BRANCH $BUG
 # Some modules are explicitly installed due to strange dependency issues
 RUN cd $BUGZILLA_HOME \
     && $CPANM Apache2::SizeLimit \
+    && $CPANM Cache::Memcached \
     && $CPANM DBD::mysql \
     && $CPANM Email::Sender \
     && $CPANM File::Copy::Recursive \
