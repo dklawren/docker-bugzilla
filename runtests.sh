@@ -39,6 +39,7 @@ su postgres -c "/usr/bin/pg_ctl -D /var/lib/pgsql/data start" && sleep 5
 sleep 3
 # Web Server Start
 echo "Starting web server ..."
+sed -e "s?^#Perl?Perl?" --in-place /etc/httpd/conf.d/bugzilla.conf
 /usr/sbin/httpd &
 sleep 3
 if [ "$GITHUB_BASE_BRANCH" = "master" ] || [ "$GITHUB_BASE_BRANCH" = "5.0" ]; then
