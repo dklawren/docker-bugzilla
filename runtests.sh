@@ -58,6 +58,9 @@ sed -e "s?%DB%?$BUGS_DB_DRIVER?g" --in-place qa/config/checksetup_answers.txt
 sed -e "s?%DB_NAME%?bugs_test?g" --in-place qa/config/checksetup_answers.txt
 sed -e "s?%USER%?$BUGZILLA_USER?g" --in-place qa/config/checksetup_answers.txt
 sed -e "s?%TRAVIS_BUILD_DIR%?$BUGZILLA_HOME?g" --in-place qa/config/selenium_test.conf
+if [ "$GITHUB_BASE_BRANCH" = "master" ] || [ "$GITHUB_BASE_BRANCH" = "5.0" ]; then
+    echo "\$answer{'memcached_servers'} = 'localhost:11211';" >> qa/config/checksetup_answers.txt
+fi
 
 echo -e "\n== Running checksetup"
 cd $BUGZILLA_HOME
@@ -76,7 +79,7 @@ if [ "$TEST_SUITE" = "selenium" ]; then
     sleep 5
 
     echo -e "\n== Downloading and starting Selenium server"
-    wget http://selenium-release.storage.googleapis.com/2.45/selenium-server-standalone-2.45.0.jar 1> /dev/null
+    wget -q --progress=bar http://selenium-release.storage.googleapis.com/2.45/selenium-server-standalone-2.45.0.jar
     java -jar selenium-server-standalone-2.45.0.jar -log /selenium.log -browserSessionReuse > /dev/null 2>&1 &
     sleep 5
 
