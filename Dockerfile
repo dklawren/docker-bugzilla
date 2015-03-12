@@ -24,6 +24,7 @@ ENV TEST_SUITE sanity
 ENV CPANM cpanm --quiet --notest --skip-satisfied
 
 # Software installation
+RUN yum -y -q update && yum clean all
 ADD rpm_list /rpm_list
 RUN yum -y -q install https://dev.mysql.com/get/mysql-community-release-el7-5.noarch.rpm \
     && yum clean all
