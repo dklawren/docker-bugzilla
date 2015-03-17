@@ -38,7 +38,6 @@ echo "Cloning git repo $GITHUB_QA_GIT branch $GITHUB_BASE_BRANCH ..."
 git clone $GITHUB_QA_GIT -b $GITHUB_BASE_BRANCH qa
 
 echo -e "\n== Starting database"
-echo "Starting database ..."
 /usr/bin/mysqld_safe &
 sleep 3
 
