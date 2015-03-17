@@ -32,36 +32,25 @@ if [ "$TEST_SUITE" = "docs" ]; then
     exit $?
 fi
 
-echo -e "\n== Starting services"
-# Database Start
-echo "Starting database ..."
-/usr/bin/mysqld_safe &
-sleep 3
-# Web Server Start
-echo "Starting web server ..."
-sed -e "s?^#Perl?Perl?" --in-place /etc/httpd/conf.d/bugzilla.conf
-/usr/sbin/httpd &
-sleep 3
-if [ "$GITHUB_BASE_BRANCH" = "master" ] || [ "$GITHUB_BASE_BRANCH" = "5.0" ]; then
-    # Memcached Start
-    echo "Starting memcached server ..."
-    /usr/bin/memcached -u memcached -d
-    sleep 3
-fi
-
 echo -e "\n== Cloning QA test suite"
 cd $BUGZILLA_HOME
 echo "Cloning git repo $GITHUB_QA_GIT branch $GITHUB_BASE_BRANCH ..."
 git clone $GITHUB_QA_GIT -b $GITHUB_BASE_BRANCH qa
+
+echo -e "\n== Starting database"
+/usr/bin/mysqld_safe &
+sleep 3
+
+echo -e "\n== Starting memcached"
+/usr/bin/memcached -u memcached -d
+sleep 3
 
 echo -e "\n== Updating configuration"
 sed -e "s?%DB%?$BUGS_DB_DRIVER?g" --in-place qa/config/checksetup_answers.txt
 sed -e "s?%DB_NAME%?bugs_test?g" --in-place qa/config/checksetup_answers.txt
 sed -e "s?%USER%?$BUGZILLA_USER?g" --in-place qa/config/checksetup_answers.txt
 sed -e "s?%TRAVIS_BUILD_DIR%?$BUGZILLA_HOME?g" --in-place qa/config/selenium_test.conf
-if [ "$GITHUB_BASE_BRANCH" = "master" ] || [ "$GITHUB_BASE_BRANCH" = "5.0" ]; then
-    echo "\$answer{'memcached_servers'} = 'localhost:11211';" >> qa/config/checksetup_answers.txt
-fi
+echo "\$answer{'memcached_servers'} = 'localhost:11211';" >> qa/config/checksetup_answers.txt
 
 echo -e "\n== Running checksetup"
 cd $BUGZILLA_HOME
@@ -71,6 +60,11 @@ cd $BUGZILLA_HOME
 echo -e "\n== Generating test data"
 cd $BUGZILLA_HOME/qa/config
 perl generate_test_data.pl
+
+echo -e "\n== Starting web server"
+sed -e "s?^#Perl?Perl?" --in-place /etc/httpd/conf.d/bugzilla.conf
+/usr/sbin/httpd &
+sleep 3
 
 if [ "$TEST_SUITE" = "selenium" ]; then
     export DISPLAY=:0
