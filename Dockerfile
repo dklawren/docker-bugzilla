@@ -79,7 +79,7 @@ RUN cd $BUGZILLA_HOME \
     && $CPANM Pod::Coverage \
     && $CPANM Software::License \
     && $CPANM Test::WWW::Selenium \
-    && $CPANM Text::Markdown \
+    && $CPANM Text::MultiMarkdown \
     && $CPANM --installdeps --with-recommends .
 
 # Bugzilla configuration
