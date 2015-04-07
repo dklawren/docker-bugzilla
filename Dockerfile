@@ -17,7 +17,7 @@ ENV BUGZILLA_URL http://localhost/bmo
 
 ENV GITHUB_BASE_GIT https://github.com/mozilla/webtools-bmo-bugzilla
 ENV GITHUB_BASE_BRANCH master
-ENV GITHUB_QA_GIT https://github.com/bugzilla/qa
+ENV GITHUB_QA_GIT https://github.com/mozilla/webtools-bmo-qa
 
 ENV ADMIN_EMAIL admin@mozilla.bugs
 ENV ADMIN_PASS password
@@ -74,6 +74,7 @@ RUN cd $BUGZILLA_HOME \
     && $CPANM DBD::mysql \
     && $CPANM Email::Sender \
     && $CPANM File::Copy::Recursive \
+    && $CPANM File::Slurp \
     && $CPANM File::Which \
     && $CPANM HTML::FormatText \
     && $CPANM HTML::FormatText::WithLinks \
@@ -85,7 +86,8 @@ RUN cd $BUGZILLA_HOME \
     && $CPANM Software::License \
     && $CPANM Test::WWW::Selenium \
     && $CPANM Locale::Language \
-    && $CPANM Text::MultiMarkdown \
+    && $CPANM Text::MultiMarkdown
+RUN cd $BUGZILLA_HOME \
     && $CPANM --installdeps --with-recommends .
 
 # Bugzilla configuration
@@ -110,7 +112,10 @@ EXPOSE 80
 EXPOSE 22
 
 # Testing script for CI
-RUN wget https://raw.githubusercontent.com/taskcluster/buildbot-step/master/buildbot_step -O /buildbot_step
+RUN wget https://selenium-release.storage.googleapis.com/2.45/selenium-server-standalone-2.45.0.jar \
+    -O /selenium-server.jar
+RUN wget https://raw.githubusercontent.com/taskcluster/buildbot-step/master/buildbot_step \
+    -O /buildbot_step
 RUN chmod 755 /buildbot_step
 ADD runtests.sh /runtests.sh
 RUN chmod 755 /runtests.sh
