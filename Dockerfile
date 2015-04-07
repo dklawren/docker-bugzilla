@@ -69,6 +69,7 @@ RUN cd $BUGZILLA_HOME \
     && $CPANM DBD::mysql \
     && $CPANM Email::Sender \
     && $CPANM File::Copy::Recursive \
+    && $CPANM File::Slurp \
     && $CPANM File::Which \
     && $CPANM HTML::FormatText \
     && $CPANM HTML::FormatText::WithLinks \
@@ -79,8 +80,12 @@ RUN cd $BUGZILLA_HOME \
     && $CPANM Pod::Coverage \
     && $CPANM Software::License \
     && $CPANM Test::WWW::Selenium \
-    && $CPANM Text::MultiMarkdown \
-    && $CPANM --installdeps --with-recommends .
+    && $CPANM Text::MultiMarkdown
+RUN if [ "$GITHUB_BASE_BRANCH" == "master" ]; then \
+    cd $BUGZILLA_HOME && perl checksetup.pl --cpanfile; fi
+RUN cd $BUGZILLA_HOME \
+    && $CPANM --installdeps --with-recommends --with-all-features \
+        --without-feature oracle --without-feature sqlite --without-feature pg .
 
 # Bugzilla configuration
 ADD checksetup_answers.txt /checksetup_answers.txt
@@ -103,7 +108,10 @@ EXPOSE 80
 EXPOSE 22
 
 # Testing script for CI
-RUN wget https://raw.githubusercontent.com/taskcluster/buildbot-step/master/buildbot_step -O /buildbot_step
+RUN wget https://selenium-release.storage.googleapis.com/2.45/selenium-server-standalone-2.45.0.jar \
+    -O /selenium-server.jar
+RUN wget https://raw.githubusercontent.com/taskcluster/buildbot-step/master/buildbot_step \
+    -O /buildbot_step
 RUN chmod 755 /buildbot_step
 ADD runtests.sh /runtests.sh
 RUN chmod 755 /runtests.sh

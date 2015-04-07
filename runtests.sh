@@ -73,9 +73,8 @@ if [ "$TEST_SUITE" = "selenium" ]; then
     Xvfb $DISPLAY -screen 0 1024x768x24 > /dev/null 2>&1 &
     sleep 5
 
-    echo -e "\n== Downloading and starting Selenium server"
-    wget -q --progress=bar http://selenium-release.storage.googleapis.com/2.45/selenium-server-standalone-2.45.0.jar
-    java -jar selenium-server-standalone-2.45.0.jar -log /selenium.log -browserSessionReuse > /dev/null 2>&1 &
+    echo -e "\n== Starting Selenium server"
+    java -jar /selenium-server.jar -log /selenium.log > /dev/null 2>&1 &
     sleep 5
 
     cd $BUGZILLA_HOME/qa/t
