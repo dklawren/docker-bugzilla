@@ -79,11 +79,13 @@ RUN cd $BUGZILLA_HOME \
     && $CPANM Software::License \
     && $CPANM Test::WWW::Selenium \
     && $CPANM Text::MultiMarkdown
-RUN if [ "$GITHUB_BASE_BRANCH" == "master" ]; then \
-    cd $BUGZILLA_HOME && perl checksetup.pl --cpanfile; fi
-RUN cd $BUGZILLA_HOME \
-    && $CPANM --installdeps --with-recommends --with-all-features \
-        --without-feature oracle --without-feature sqlite --without-feature pg .
+RUN cd $BUGZILLA_HOME; \
+    if [ "$GITHUB_BASE_BRANCH" == "master" ]; then \
+        cd $BUGZILLA_HOME && perl checksetup.pl --cpanfile; \
+    else \
+        $CPANM --installdeps --with-recommends --with-all-features \
+            --without-feature oracle --without-feature sqlite --without-feature pg .; \
+    fi
 
 # Bugzilla configuration
 ADD checksetup_answers.txt /checksetup_answers.txt
