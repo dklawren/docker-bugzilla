@@ -8,7 +8,6 @@ ENV container docker
 ENV BUGS_DB_DRIVER mysql
 ENV BUGS_DB_NAME bugs
 ENV BUGS_DB_PASS bugs
-ENV BUGS_DB_USER bugs
 ENV BUGS_DB_HOST localhost
 
 ENV BUGZILLA_USER bugzilla
@@ -85,9 +84,7 @@ RUN cd $BUGZILLA_HOME \
     && $CPANM Pod::Coverage \
     && $CPANM Software::License \
     && $CPANM Test::WWW::Selenium \
-    && $CPANM Locale::Language \
-    && $CPANM Text::MultiMarkdown
-RUN cd $BUGZILLA_HOME \
+    && $CPANM Text::MultiMarkdown \
     && $CPANM --installdeps --with-recommends .
 
 # Bugzilla configuration
