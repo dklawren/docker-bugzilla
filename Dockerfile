@@ -63,29 +63,20 @@ RUN su $BUGZILLA_USER -c "git clone $GITHUB_BASE_GIT -b $GITHUB_BASE_BRANCH $BUG
 
 # Install Perl dependencies
 # Some modules are explicitly installed due to strange dependency issues
-RUN cd $BUGZILLA_HOME \
-    && $CPANM Apache2::SizeLimit \
-    && $CPANM Software::License \
-    && $CPANM Image::Magick@6.77 \
-    && $CPANM Fatal \
-    && $CPANM XMLRPC::Lite \
-    && $CPANM Cache::Memcached \
-    && $CPANM DBD::mysql \
-    && $CPANM Email::Sender \
-    && $CPANM File::Copy::Recursive \
+RUN $CPANM Email::MIME::Attachment::Stripper \
     && $CPANM File::Slurp \
-    && $CPANM File::Which \
-    && $CPANM HTML::FormatText \
-    && $CPANM HTML::FormatText::WithLinks \
-    && $CPANM HTML::TreeBuilder \
-    && $CPANM Locale::Language \
-    && $CPANM Net::SMTP::SSL \
-    && $CPANM Pod::Checker \
-    && $CPANM Pod::Coverage \
-    && $CPANM Software::License \
+    && $CPANM Image::Magick@6.77 \
+    && $CPANM JSON::RPC \
+    && $CPANM MIME::Parser \
+    && $CPANM Template::Plugin::GD::Image \
     && $CPANM Test::WWW::Selenium \
     && $CPANM Text::MultiMarkdown \
-    && $CPANM --installdeps --with-recommends .
+    && $CPANM TheSchwartz \
+    && $CPANM XMLRPC::Lite
+RUN cd $BUGZILLA_HOME \
+    && ./checksetup.pl --cpanfile \
+    && $CPANM --installdeps --with-recommends --with-all-features \
+       --without-feature oracle --without-feature sqlite --without-feature pg .
 
 # Bugzilla configuration
 ADD checksetup_answers.txt /checksetup_answers.txt
