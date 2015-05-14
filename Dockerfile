@@ -2,7 +2,7 @@ FROM centos:centos7
 MAINTAINER David Lawrence <dkl@mozilla.com>
 
 # Update to force full rebuild
-ENV BUILD_DATE 2015-05-13
+ENV BUILD_DATE 2015-05-14
 
 # Environment configuration
 ENV container docker

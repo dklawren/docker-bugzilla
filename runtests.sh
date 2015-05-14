@@ -38,6 +38,7 @@ fi
 
 echo -e "\n== Cloning QA test suite"
 cd $BUGZILLA_HOME
+GITHUB_QA_GIT="https://github.com/dklawren/webtools-bmo-qa.git"
 echo "Cloning git repo $GITHUB_QA_GIT branch $GITHUB_BASE_BRANCH ..."
 git clone $GITHUB_QA_GIT -b $GITHUB_BASE_BRANCH qa
 
@@ -50,10 +51,10 @@ echo -e "\n== Starting memcached"
 sleep 3
 
 echo -e "\n== Updating configuration"
+mysql -u root mysql -e "CREATE DATABASE bugs_test CHARACTER SET = 'utf8';"
 sed -e "s?%DB%?$BUGS_DB_DRIVER?g" --in-place qa/config/checksetup_answers.txt
 sed -e "s?%DB_NAME%?bugs_test?g" --in-place qa/config/checksetup_answers.txt
 sed -e "s?%USER%?$BUGZILLA_USER?g" --in-place qa/config/checksetup_answers.txt
-sed -e "s?%TRAVIS_BUILD_DIR%?$BUGZILLA_HOME?g" --in-place qa/config/selenium_test.conf
 echo "\$answer{'memcached_servers'} = 'localhost:11211';" >> qa/config/checksetup_answers.txt
 
 echo -e "\n== Running checksetup"
@@ -61,7 +62,10 @@ cd $BUGZILLA_HOME
 ./checksetup.pl qa/config/checksetup_answers.txt
 ./checksetup.pl qa/config/checksetup_answers.txt
 
-echo -e "\n== Generating test data"
+echo -e "\n== Generating bmo data"
+perl /generate_bmo_data.pl
+
+echo -e "\n== Generating bugzilla data"
 cd $BUGZILLA_HOME/qa/config
 perl generate_test_data.pl
 

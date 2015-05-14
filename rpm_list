@@ -26,9 +26,9 @@ openssh-server
 openssl-devel
 passwd
 patch
-perl-core
 perl-App-cpanminus
 perl-CPAN
+perl-core
 postfix
 python-sphinx
 sudo
@@ -46,5 +46,6 @@ texlive-wrapfig
 unzip
 vim-enhanced
 wget
+x11vnc
 xmlto
 xorg-x11-server-Xvfb
