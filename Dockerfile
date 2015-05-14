@@ -1,7 +1,8 @@
 FROM centos:centos7
 MAINTAINER David Lawrence <dkl@mozilla.com>
 
-ADD CLOBBER /CLOBBER
+# Update to force full rebuild
+ENV BUILD_DATE 2015-05-13
 
 # Environment configuration
 ENV container docker
@@ -20,10 +21,8 @@ ENV GITHUB_QA_GIT https://github.com/bugzilla/qa
 
 ENV ADMIN_EMAIL admin@bugzilla.org
 ENV ADMIN_PASS password
-ENV TEST_SUITE sanity
-ENV CPANM cpanm --quiet --notest --skip-satisfied
 
-# Software installation
+# Distribution package installation
 RUN yum -y -q update && yum clean all
 ADD rpm_list /rpm_list
 RUN yum -y -q install epel-release \
@@ -54,38 +53,10 @@ RUN echo "listen_addresses='*'" >> /var/lib/pgsql/data/postgresql.conf
 
 # Sudoer configuration
 ADD sudoers /etc/sudoers
-RUN chown root.root /etc/sudoers; chmod 440 /etc/sudoers
+RUN chown root.root /etc/sudoers && chmod 440 /etc/sudoers
 
 # Clone the code repo
 RUN su $BUGZILLA_USER -c "git clone $GITHUB_BASE_GIT -b $GITHUB_BASE_BRANCH $BUGZILLA_HOME"
-
-# Install Perl dependencies
-# Some modules are explicitly installed due to strange dependency issues
-RUN cd $BUGZILLA_HOME \
-    && $CPANM Apache2::SizeLimit \
-    && $CPANM DBD::Pg \
-    && $CPANM Cache::Memcached \
-    && $CPANM Email::Sender \
-    && $CPANM File::Copy::Recursive \
-    && $CPANM File::Slurp \
-    && $CPANM File::Which \
-    && $CPANM HTML::FormatText \
-    && $CPANM HTML::FormatText::WithLinks \
-    && $CPANM HTML::TreeBuilder \
-    && $CPANM Locale::Language \
-    && $CPANM Net::SMTP::SSL \
-    && $CPANM Pod::Checker \
-    && $CPANM Pod::Coverage \
-    && $CPANM Software::License \
-    && $CPANM Test::WWW::Selenium \
-    && $CPANM Text::MultiMarkdown
-RUN cd $BUGZILLA_HOME; \
-    if [ "$GITHUB_BASE_BRANCH" == "master" ]; then \
-        cd $BUGZILLA_HOME && perl checksetup.pl --cpanfile; \
-    else \
-        $CPANM --installdeps --with-recommends --with-all-features \
-            --without-feature oracle --without-feature sqlite --without-feature pg .; \
-    fi
 
 # Bugzilla configuration
 ADD checksetup_answers.txt /checksetup_answers.txt
@@ -107,11 +78,9 @@ RUN echo "NETWORKING=yes" > /etc/sysconfig/network
 EXPOSE 80
 EXPOSE 22
 
-# Testing script for CI
-RUN wget https://selenium-release.storage.googleapis.com/2.45/selenium-server-standalone-2.45.0.jar \
-    -O /selenium-server.jar
-RUN wget https://raw.githubusercontent.com/taskcluster/buildbot-step/master/buildbot_step \
-    -O /buildbot_step
+# Testing scripts for CI
+ADD https://selenium-release.storage.googleapis.com/2.45/selenium-server-standalone-2.45.0.jar /selenium-server.jar
+ADD https://raw.githubusercontent.com/taskcluster/buildbot-step/master/buildbot_step /buildbot_step
 RUN chmod 755 /buildbot_step
 ADD runtests.sh /runtests.sh
 RUN chmod 755 /runtests.sh
