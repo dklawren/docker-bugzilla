@@ -38,7 +38,6 @@ fi
 
 echo -e "\n== Cloning QA test suite"
 cd $BUGZILLA_HOME
-GITHUB_QA_GIT="https://github.com/dklawren/webtools-bmo-qa.git"
 echo "Cloning git repo $GITHUB_QA_GIT branch $GITHUB_BASE_BRANCH ..."
 git clone $GITHUB_QA_GIT -b $GITHUB_BASE_BRANCH qa
 
