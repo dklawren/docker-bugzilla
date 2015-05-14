@@ -6,7 +6,6 @@ cd $BUGZILLA_HOME
 CPANM="cpanm --quiet --notest --skip-satisfied"
 
 if [ "$GITHUB_BASE_BRANCH" == "master" ]; then
-    $CPANM File::Slurp # Needed for checksetup to run - Bug 1163248
     perl checksetup.pl --cpanfile
     $CPANM --installdeps --with-recommends --with-all-features \
         --without-feature oracle --without-feature sqlite --without-feature pg .
