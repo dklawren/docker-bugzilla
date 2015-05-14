@@ -22,6 +22,9 @@ $CPANM Test::WWW::Selenium
 $CPANM Pod::Coverage
 $CPANM Pod::Checker
 
+# Remove CPAN build files to minimize disk usage
+rm -rf /root/.cpanm
+
 # Configure database
 /usr/bin/mysqld_safe &
 sleep 5
