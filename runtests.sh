@@ -3,6 +3,10 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+if [ -z "$TEST_SUITE" ]; then
+    TEST_SUITE=sanity
+fi
+
 set -e
 
 # Output to log file as well as STDOUT/STDERR
