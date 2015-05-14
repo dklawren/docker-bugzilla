@@ -1,7 +1,8 @@
 FROM centos:centos7
 MAINTAINER David Lawrence <dkl@mozilla.com>
 
-ADD CLOBBER /CLOBBER
+# Update to force full rebuild
+ENV BUILD_DATE 2015-05-14
 
 # Environment configuration
 ENV container docker
@@ -20,10 +21,8 @@ ENV GITHUB_QA_GIT https://github.com/mozilla/webtools-bmo-qa
 
 ENV ADMIN_EMAIL admin@mozilla.bugs
 ENV ADMIN_PASS password
-ENV TEST_SUITE sanity
-ENV CPANM cpanm --quiet --notest --skip-satisfied
 
-# Software installation
+# Distribution package installation
 RUN yum -y -q update && yum clean all
 ADD rpm_list /rpm_list
 RUN yum -y -q install https://dev.mysql.com/get/mysql-community-release-el7-5.noarch.rpm \
@@ -49,34 +48,17 @@ ADD bugzilla.conf /etc/httpd/conf.d/bugzilla.conf
 
 # MySQL configuration
 ADD my.cnf /etc/my.cnf
-RUN chmod 644 /etc/my.cnf; chown root.root /etc/my.cnf
+RUN chmod 644 /etc/my.cnf && chown root.root /etc/my.cnf
 RUN rm -rf /etc/mysql
 RUN rm -rf /var/lib/mysql/*
 RUN /usr/bin/mysql_install_db --user=$BUGZILLA_USER --basedir=/usr --datadir=/var/lib/mysql
 
 # Sudoer configuration
 ADD sudoers /etc/sudoers
-RUN chown root.root /etc/sudoers; chmod 440 /etc/sudoers
+RUN chown root.root /etc/sudoers && chmod 440 /etc/sudoers
 
 # Clone the code repo
 RUN su $BUGZILLA_USER -c "git clone $GITHUB_BASE_GIT -b $GITHUB_BASE_BRANCH $BUGZILLA_HOME"
-
-# Install Perl dependencies
-# Some modules are explicitly installed due to strange dependency issues
-RUN $CPANM Email::MIME::Attachment::Stripper \
-    && $CPANM File::Slurp \
-    && $CPANM Image::Magick@6.77 \
-    && $CPANM JSON::RPC \
-    && $CPANM MIME::Parser \
-    && $CPANM Template::Plugin::GD::Image \
-    && $CPANM Test::WWW::Selenium \
-    && $CPANM Text::MultiMarkdown \
-    && $CPANM TheSchwartz \
-    && $CPANM XMLRPC::Lite
-RUN cd $BUGZILLA_HOME \
-    && ./checksetup.pl --cpanfile \
-    && $CPANM --installdeps --with-recommends --with-all-features \
-       --without-feature oracle --without-feature sqlite --without-feature pg .
 
 # Bugzilla configuration
 ADD checksetup_answers.txt /checksetup_answers.txt
@@ -99,11 +81,9 @@ RUN echo "NETWORKING=yes" > /etc/sysconfig/network
 EXPOSE 80
 EXPOSE 22
 
-# Testing script for CI
-RUN wget https://selenium-release.storage.googleapis.com/2.45/selenium-server-standalone-2.45.0.jar \
-    -O /selenium-server.jar
-RUN wget https://raw.githubusercontent.com/taskcluster/buildbot-step/master/buildbot_step \
-    -O /buildbot_step
+# Testing scripts for CI
+ADD https://selenium-release.storage.googleapis.com/2.45/selenium-server-standalone-2.45.0.jar /selenium-server.jar
+ADD https://raw.githubusercontent.com/taskcluster/buildbot-step/master/buildbot_step /buildbot_step
 RUN chmod 755 /buildbot_step
 ADD runtests.sh /runtests.sh
 RUN chmod 755 /runtests.sh

@@ -31,9 +31,10 @@ openssl-devel
 passwd
 patch
 patchutils
-perl-core
 perl-App-cpanminus
 perl-CPAN
+perl-core
+perl-core
 postfix
 python-sphinx
 rsh
@@ -54,5 +55,6 @@ texlive-wrapfig
 unzip
 vim-enhanced
 wget
+x11vnc
 xmlto
 xorg-x11-server-Xvfb

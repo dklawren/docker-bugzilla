@@ -3,6 +3,10 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+if [ -z "$TEST_SUITE" ]; then
+    TEST_SUITE=sanity
+fi
+
 set -e
 
 # Output to log file as well as STDOUT/STDERR
@@ -46,10 +50,10 @@ echo -e "\n== Starting memcached"
 sleep 3
 
 echo -e "\n== Updating configuration"
+mysql -u root mysql -e "CREATE DATABASE bugs_test CHARACTER SET = 'utf8';"
 sed -e "s?%DB%?$BUGS_DB_DRIVER?g" --in-place qa/config/checksetup_answers.txt
 sed -e "s?%DB_NAME%?bugs_test?g" --in-place qa/config/checksetup_answers.txt
 sed -e "s?%USER%?$BUGZILLA_USER?g" --in-place qa/config/checksetup_answers.txt
-sed -e "s?%TRAVIS_BUILD_DIR%?$BUGZILLA_HOME?g" --in-place qa/config/selenium_test.conf
 echo "\$answer{'memcached_servers'} = 'localhost:11211';" >> qa/config/checksetup_answers.txt
 
 echo -e "\n== Running checksetup"
@@ -57,7 +61,10 @@ cd $BUGZILLA_HOME
 ./checksetup.pl qa/config/checksetup_answers.txt
 ./checksetup.pl qa/config/checksetup_answers.txt
 
-echo -e "\n== Generating test data"
+echo -e "\n== Generating bmo data"
+perl /generate_bmo_data.pl
+
+echo -e "\n== Generating bugzilla data"
 cd $BUGZILLA_HOME/qa/config
 perl generate_test_data.pl
 
