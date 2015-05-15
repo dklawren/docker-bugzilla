@@ -3,6 +3,7 @@ bugzilla:
   ports:
     - "80:80"
     - "2222:22"
+    - "5900:5900"
   volumes:
     - "/home/dkl/devel/:/home/bugzilla/devel/"
     - "/home/dkl/data/bzdev/mysql/:/var/lib/mysql/"

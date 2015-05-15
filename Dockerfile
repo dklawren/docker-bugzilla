@@ -60,6 +60,11 @@ RUN chown root.root /etc/sudoers && chmod 440 /etc/sudoers
 # Clone the code repo
 RUN su $BUGZILLA_USER -c "git clone $GITHUB_BASE_GIT -b $GITHUB_BASE_BRANCH $BUGZILLA_HOME"
 
+# Bugzilla dependencies
+ADD install_deps.sh /install_deps.sh
+RUN chmod 755 /install_deps.sh
+RUN /install_deps.sh
+
 # Bugzilla configuration
 ADD checksetup_answers.txt /checksetup_answers.txt
 ADD generate_bmo_data.pl /generate_bmo_data.pl
@@ -80,6 +85,7 @@ RUN /my_config.sh
 RUN echo "NETWORKING=yes" > /etc/sysconfig/network
 EXPOSE 80
 EXPOSE 22
+EXPOSE 5900
 
 # Testing scripts for CI
 ADD https://selenium-release.storage.googleapis.com/2.45/selenium-server-standalone-2.45.0.jar /selenium-server.jar
