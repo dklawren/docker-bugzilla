@@ -56,6 +56,9 @@ sed -e "s?%USER%?$BUGZILLA_USER?g" --in-place qa/config/checksetup_answers.txt
 sed -e "s?%TRAVIS_BUILD_DIR%?$BUGZILLA_HOME?g" --in-place qa/config/selenium_test.conf
 echo "\$answer{'memcached_servers'} = 'localhost:11211';" >> qa/config/checksetup_answers.txt
 
+echo -e "\n== Install dependencies"
+/install_deps.sh
+
 echo -e "\n== Running checksetup"
 cd $BUGZILLA_HOME
 ./checksetup.pl qa/config/checksetup_answers.txt
@@ -73,12 +76,20 @@ sleep 3
 if [ "$TEST_SUITE" = "selenium" ]; then
     export DISPLAY=:0
 
+    # Setup dbus for Firefox
+    dbus-uuidgen > /var/lib/dbus/machine-id
+
     echo -e "\n== Starting virtual frame buffer"
-    Xvfb $DISPLAY -screen 0 1024x768x24 > /dev/null 2>&1 &
+    Xvfb $DISPLAY -screen 0 1024x768x24 -ac -r -cc 4 -accessx \
+        -xinerama -extension RANDR 2>&1 | tee /xvfb.log &
     sleep 5
 
     echo -e "\n== Starting Selenium server"
     java -jar /selenium-server.jar -log /selenium.log > /dev/null 2>&1 &
+    sleep 5
+
+    echo -e "\n== Starting x11vnc"
+    x11vnc -forever -display $DISPLAY 2>&1 | tee /x11vnc.log &
     sleep 5
 
     cd $BUGZILLA_HOME/qa/t
