@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd $BUGZILLA_HOME
+cd $BUGZILLA_ROOT
 
 # Configure database
 su postgres -c "/usr/bin/pg_ctl -D /var/lib/pgsql/data start" && sleep 5
