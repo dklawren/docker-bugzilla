@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd $BUGZILLA_HOME
+cd $BUGZILLA_ROOT
 
 # Install Perl dependencies
 CPANM="cpanm --quiet --notest --skip-satisfied"

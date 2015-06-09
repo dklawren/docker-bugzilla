@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd $BUGZILLA_HOME
+cd $BUGZILLA_ROOT
 
 # Configure database
 /usr/bin/mysqld_safe &
