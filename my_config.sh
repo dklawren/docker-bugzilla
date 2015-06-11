@@ -4,16 +4,17 @@
 export HOME=/home/$BUGZILLA_USER
 
 # Custom dependencies
-$CPANM IPC::System::Simple
 $CPANM App::Cmd
-$CPANM File::Copy::Recursive
 $CPANM Config::General
-$CPANM Net::RabbitMQ
+$CPANM File::Copy::Recursive
+$CPANM File::Slurp
 $CPANM GraphViz
+$CPANM IPC::System::Simple
+$CPANM JSON::RPC::Client
+$CPANM Net::RabbitMQ
 $CPANM Pod::Checker
 $CPANM REST::Client
 $CPANM Test::WWW::Selenium
-$CPANM JSON::RPC::Client
 
 # Bugzilla dev manager configuration
 git clone https://github.com/dklawren/bugzilla-dev-manager.git \
