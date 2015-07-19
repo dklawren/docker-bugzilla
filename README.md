@@ -141,10 +141,11 @@ The Administrator username is `admin@mozilla.bugs` and the password is `password
 You can use the Administrator account to creat other users, add products or
 components, etc.
 
-You can also ssh into the container using `ssh bugzilla@localhost -p2222` command.
-The password  is `bugzilla`. You can run multiple containers but you will need
-to give each one a different name/hostname as well as non-conflicting ports
-numbers for ssh and httpd.
+You can also ssh into the container using `ssh bugzilla@localhost -p2222`
+command. As above, you'll have to replace "localhost" with the IP address of
+the VM if you are using boot2docker. The password is `bugzilla`. You can
+run multiple containers but you will need to give each one a different
+name/hostname as well as non-conflicting ports numbers for ssh and httpd.
 
 ## TODO
 
