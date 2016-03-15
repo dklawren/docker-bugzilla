@@ -56,8 +56,6 @@ echo -e "\n== Updating configuration"
 sed -e "s?%DB%?$BUGS_DB_DRIVER?g" --in-place qa/config/checksetup_answers.txt
 sed -e "s?%DB_NAME%?bugs_test?g" --in-place qa/config/checksetup_answers.txt
 sed -e "s?%USER%?$BUGZILLA_USER?g" --in-place qa/config/checksetup_answers.txt
-sed -e "s?%TRAVIS_BUILD_DIR%?$BUGZILLA_ROOT?g" --in-place qa/config/selenium_test.conf
-sed -e "s?%TRAVIS_BUILD_DIR%?$BUGZILLA_ROOT?g" --in-place qa/config/config-checksetup-mysql
 echo "\$answer{'memcached_servers'} = 'localhost:11211';" >> qa/config/checksetup_answers.txt
 
 if [ "$TEST_SUITE" == "checksetup" ]; then
@@ -106,6 +104,6 @@ fi
 
 if [ "$TEST_SUITE" = "webservices" ]; then
     cd $BUGZILLA_ROOT/qa/t
-    /buildbot_step "Webservices" prove -f -v -I$BUGZILLA_ROOT/lib webservice_*.t
+    /buildbot_step "Webservices" prove -f -v -I$BUGZILLA_ROOT/lib {rest,webservice}_*.t
     exit $?
 fi

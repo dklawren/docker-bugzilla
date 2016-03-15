@@ -1,4 +1,4 @@
-FROM centos:centos7
+FROM centos:7
 MAINTAINER David Lawrence <dkl@mozilla.com>
 
 # Environment configuration
@@ -21,22 +21,15 @@ ENV ADMIN_PASS password
 
 # Distribution package installation
 COPY rpm_list /rpm_list
-RUN yum -y -q install https://dev.mysql.com/get/mysql-community-release-el7-5.noarch.rpm \
-    epel-release && yum clean all
-RUN yum -y -q install `cat /rpm_list` && yum clean all
+RUN yum -y -q update \
+    && yum -y -q install epel-release \
+    && yum -y -q install `cat /rpm_list` \
+    && yum clean all
 
 # User configuration
 RUN useradd -m -G wheel -u 1000 -s /bin/bash $BUGZILLA_USER \
     && passwd -u -f $BUGZILLA_USER \
     && echo "bugzilla:bugzilla" | chpasswd
-
-# sshd
-RUN mkdir -p /var/run/sshd \
-    && chmod -rx /var/run/sshd \
-    && ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key -N '' \
-    && ssh-keygen -t dsa -f /etc/ssh/ssh_host_dsa_key -N '' \
-    && ssh-keygen -t ecdsa -f /etc/ssh/ssh_host_ecdsa_key -N '' \
-    && sed -ri 's/#UseDNS yes/UseDNS no/'g /etc/ssh/sshd_config
 
 # Apache configuration
 COPY bugzilla.conf /etc/httpd/conf.d/bugzilla.conf

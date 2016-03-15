@@ -18,9 +18,10 @@ else
 fi
 
 # For testing support
+$CPANM JSON::XS
 $CPANM Test::WWW::Selenium
 $CPANM Pod::Coverage
 $CPANM Pod::Checker
 
 # Remove CPAN build files to minimize disk usage
-rm -rf /root/.cpanm
+rm -rf ~/.cpanm

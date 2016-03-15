@@ -18,9 +18,6 @@ make
 memcached
 mod_perl
 mod_perl-devel
-openssh
-openssh-server
-openssl-devel
 passwd
 patch
 perl-App-cpanminus
