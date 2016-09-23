@@ -8,7 +8,7 @@ Configure a running Bugzilla system using Docker
 * Running latest Centos
 * Preconfigured with initial data and test product
 * Running Apache2 and MySQL Community Server 5.6
-* Openssh server so you can ssh in to the system to make changes
+* you can connect in to the container to make changes
 * Code resides in `/home/bugzilla/devel/htdocs/bugzilla` and can be updated,
   diffed, and branched using standard git commands
 
@@ -141,10 +141,9 @@ The Administrator username is `admin@bugzilla.org` and the password is `password
 You can use the Administrator account to creat other users, add products or
 components, etc.
 
-You can also ssh into the container using `ssh bugzilla@localhost -p2222` command.
-The password  is `bugzilla`. You can run multiple containers but you will need
-to give each one a different name/hostname as well as non-conflicting ports
-numbers for ssh and httpd.
+You can also get into the container using `docker exec -i -t $YOURCONTAINER /bin/bash`.
+You can run multiple containers but you will need to give each one
+a different name/hostname as well as non-conflicting ports numbers for ssh and httpd.
 
 ## TODO
 

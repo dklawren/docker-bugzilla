@@ -64,7 +64,6 @@ RUN chown -R $BUGZILLA_USER.$BUGZILLA_USER $BUGZILLA_HOME
 # Networking
 RUN echo "NETWORKING=yes" > /etc/sysconfig/network
 EXPOSE 80
-EXPOSE 22
 EXPOSE 5900
 
 # Testing scripts for CI
