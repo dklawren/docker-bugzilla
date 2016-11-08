@@ -1,0 +1,8 @@
+version: '2'
+services:
+  bugzilla:
+    build: .
+    ports:
+      - "8080:80"
+      - "2222:22"
+      - "5900:5900"
