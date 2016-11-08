@@ -3,6 +3,11 @@ Docker Bugzilla
 
 Configure a running Bugzilla system using Docker
 
+[docker](https://docs.docker.com/installation/) |
+[docker-compose](https://docs.docker.com/compose/install/) |
+[windows](http://docs.docker.com/installation/windows/) |
+[vagrant](https://docs.vagrantup.com/v2/getting-started/)
+
 ## Features
 
 * Running latest Centos
@@ -12,19 +17,17 @@ Configure a running Bugzilla system using Docker
 * Code resides in `/home/bugzilla/devel/htdocs/bugzilla` and can be updated,
   diffed, and branched using standard git commands
 
-## How to install Docker and Fig
+## How to install Docker and DockerCompose
 
 ### Linux
 
 1. Visit [Docker][docker] and get docker up and running on your system.
-
-2. Visit [Fig][fig] to install Fig for managing Docker containers.
+2. Visit [DockerCompose][docker-compose] and get docker compose up and running on your system.
 
 ### OSX
 
 1. Visit [Docker][docker] and get docker up and running on your system.
-
-2. Visit [Fig][fig] to install Fig for managing multiple related Docker containers.
+2. Visit [Docker Compose][docker-compose] and get docker compose up and running on your system.
 
 3. Start boot2docker in a terminal once it is installed. Ensure that you run the
  export DOCKER_HOST=... lines when prompted:
@@ -34,7 +37,7 @@ $ boot2docker start
 $ export DOCKER_HOST=tcp://192.168.59.103:2375
 ```
 
-### Windows
+### Windows ( DEPRECATED, it needs to be updated )
 
 1. Install the [Windows boot2docker installer][windows]
 2. Run the "Boot2Docker Start" shortcut on the startmenu (this inits the VM,
@@ -99,7 +102,7 @@ To build a fresh image, just change to the directory containing the checked out
 files and run the below command:
 
 ```bash
-$ fig build
+$ docker-compose build
 ```
 
 ## How to start Bugzilla Docker image
@@ -107,7 +110,7 @@ $ fig build
 To start a new container (or rerun your last container) you simply do:
 
 ```bash
-$ fig up
+$ docker-compose up
 ```
 
 This will stay in the foreground and you will see the output from `supervisord`. You
@@ -116,9 +119,9 @@ can use the `-d` option to run the container in the background.
 To stop, start or remove the container that was created from the last run, you can do:
 
 ```bash
-$ fig stop
-$ fig start
-$ fig rm
+$ docker-compose stop
+$ docker-compose start
+$ docker-compose rm
 ```
 
 ## How to access the Bugzilla container
@@ -152,6 +155,6 @@ numbers for ssh and httpd.
 * Enable memcached
 
 [docker]: https://docs.docker.com/installation/
+[docker-compose]: https://docs.docker.com/compose/install/
 [windows]: http://docs.docker.com/installation/windows/
-[fig]: http://www.fig.sh
 [vagrant]: https://docs.vagrantup.com/v2/getting-started/
